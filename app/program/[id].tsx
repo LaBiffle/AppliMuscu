@@ -430,7 +430,7 @@ export default function ProgramDetails() {
       <View style={styles.footer}>
         <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteProgram}>
           <View style={styles.buttonContent}>
-            <Ionicons name="trash-outline" size={20) color="#FF5252" />
+            <Ionicons name="trash-outline" size={20} color="#FF5252" />
             <Text style={styles.deleteButtonText}>Supprimer le programme</Text>
           </View>
         </TouchableOpacity>
