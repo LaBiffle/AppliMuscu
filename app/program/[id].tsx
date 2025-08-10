@@ -13,14 +13,13 @@ import {
 } from 'react-native';
 import { useLocalSearchParams, router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Program, WeekData, TrainingSession } from '../../types/session';
+import { WeekData, TrainingSession } from '../../types/session';
+import { Program } from '../../types/program';
 import { 
-  getProgram, 
   getWeekSessions, 
-  deleteProgram, 
-  saveProgram,
   deleteSession 
 } from '../../utils/sessionStorage';
+import { ProgramStorage } from '../../utils/storage';
 import { exportWeekToExcel, exportAllWeeksData } from '../../utils/excelUtils';
 
 export default function ProgramDetails() {
@@ -45,7 +44,7 @@ export default function ProgramDetails() {
 
     try {
       setLoading(true);
-      const programData = await getProgram(id);
+      const programData = await ProgramStorage.getProgram(id);
       setProgram(programData);
 
       if (programData) {
@@ -122,7 +121,7 @@ export default function ProgramDetails() {
     if (!editedProgram) return;
 
     try {
-      await saveProgram(editedProgram);
+      await ProgramStorage.updateProgram(editedProgram.id, editedProgram);
       setProgram(editedProgram);
       setEditModalVisible(false);
       Alert.alert('Succès', 'Programme modifié avec succès');
@@ -144,7 +143,7 @@ export default function ProgramDetails() {
           style: 'destructive',
           onPress: async () => {
             try {
-              await deleteProgram(id);
+              await ProgramStorage.deleteProgram(id);
               router.back();
             } catch (error) {
               Alert.alert('Erreur', 'Impossible de supprimer le programme');
