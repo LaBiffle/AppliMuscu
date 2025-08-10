@@ -38,35 +38,6 @@ export class SessionStorage {
     }
   }
 
-  static async findWeekDataByName(programId: string, weekName: string): Promise<WeekData | null> {
-    try {
-      const allWeeks = await this.getAllWeekData();
-      return allWeeks.find(week => 
-        week.programId === programId && week.weekName === weekName
-      ) || null;
-    } catch (error) {
-      console.error('Error finding week data by name:', error);
-      return null;
-    }
-  }
-
-  static async updateWeekData(updatedWeekData: WeekData): Promise<void> {
-    try {
-      const allWeeks = await this.getAllWeekData();
-      const index = allWeeks.findIndex(week => week.id === updatedWeekData.id);
-      
-      if (index !== -1) {
-        allWeeks[index] = updatedWeekData;
-        await AsyncStorage.setItem(WEEK_DATA_KEY, JSON.stringify(allWeeks));
-      } else {
-        // Si l'ID n'est pas trouvé, l'ajouter comme nouvelle entrée
-        await this.saveWeekData(updatedWeekData);
-      }
-    } catch (error) {
-      console.error('Error updating week data:', error);
-    }
-  }
-
   static async saveWeekData(weekData: WeekData): Promise<void> {
     try {
       const existingWeeks = await this.getAllWeekData();
@@ -83,16 +54,6 @@ export class SessionStorage {
       return data ? JSON.parse(data) : [];
     } catch (error) {
       console.error('Error loading week data:', error);
-      return [];
-    }
-  }
-
-  static async getWeekDataForProgram(programId: string): Promise<WeekData[]> {
-    try {
-      const allWeeks = await this.getAllWeekData();
-      return allWeeks.filter(week => week.programId === programId);
-    } catch (error) {
-      console.error('Error loading week data for program:', error);
       return [];
     }
   }
